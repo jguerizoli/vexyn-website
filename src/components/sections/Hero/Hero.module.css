@@ -21,14 +21,14 @@
 }
 
 .heroTitle {
-  font-size: clamp(3.5rem, 8vw, 6rem); /* Increased base scale */
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-family: var(--font-main);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.06em; /* Even tighter for authority */
-  line-height: 0.8; /* Tighter line height */
+  letter-spacing: -0.06em;
+  line-height: 0.8;
   color: #fff;
-  margin-bottom: var(--respiro-v-sm); /* Closer to subtitle */
-  font-family: 'Epilogue', sans-serif;
+  margin-bottom: var(--respiro-v-sm);
 }
 
 .titleLine1 {
@@ -45,7 +45,7 @@
 }
 
 .heroSubtitle {
-  font-family: 'Space Grotesk', monospace;
+  font-family: var(--font-mono);
   color: #fff;
   font-size: 1rem;
   letter-spacing: 0.2em;

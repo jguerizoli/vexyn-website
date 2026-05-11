@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap&subset=latin,latin-ext');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap&subset=latin,latin-ext');
 
 @tailwind base;
 @tailwind components;
@@ -16,7 +16,7 @@
   --vx-border: rgba(255, 255, 255, 0.08);
   --vx-accent-glow: rgba(229, 81, 26, 0.15);
   
-  --font-main: 'Epilogue', sans-serif;
+  --font-main: 'Outfit', sans-serif;
   --font-mono: 'Space Grotesk', monospace;
   
   /* Architectural Respiro (Breathing Room) */
@@ -41,6 +41,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
 }
 
 @keyframes technical-flicker {
@@ -63,6 +64,11 @@ body {
   background: #000; /* Infinite Void */
   overflow-x: hidden;
   font-family: var(--font-main);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-main);
+  font-weight: 900;
 }
 
 * {

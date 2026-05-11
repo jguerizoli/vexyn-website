@@ -68,8 +68,8 @@
   font-family: var(--font-main);
   font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   font-weight: 900;
-  line-height: 1.2; 
-  letter-spacing: -0.02em;
+  line-height: 0.8; 
+  letter-spacing: -0.06em;
   text-transform: uppercase;
   color: #fff;
   margin: 0;
