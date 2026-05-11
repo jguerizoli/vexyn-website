@@ -24,7 +24,7 @@
 }
 
 .sectionTitle {
-  font-family: var(--font-main, 'Epilogue'), sans-serif;
+  font-family: var(--font-main);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.06em;

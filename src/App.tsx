@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Sidebar from './components/layout/Sidebar';
 import Hero from './components/sections/Hero';
 import Services from './components/sections/Services/Services';
+import Results from './components/sections/Results';
 import './App.css';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
@@ -34,10 +35,7 @@ function App() {
       <main className="content">
         <Hero scrollTo={scrollTo} />
         <Services scrollTo={scrollTo} />
-
-        <section id="social-proof" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h1>Results Section</h1>
-        </section>
+        <Results scrollTo={scrollTo} />
         <section id="partners" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <h1>Partners Section</h1>
         </section>
