@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap&subset=latin,latin-ext');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --vx-orange: #E5511A;
+  --vx-black: #050505;
+  --vx-abismo: #131313;
+  --vx-dark-grey: #121212;
+  --vx-light-grey: #a0a0a0;
+  --vx-white: #ffffff;
+  --vx-glass: rgba(255, 255, 255, 0.03);
+  --vx-border: rgba(255, 255, 255, 0.08);
+  --vx-accent-glow: rgba(229, 81, 26, 0.15);
+  
+  --font-main: 'Epilogue', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+  
+  /* Architectural Respiro (Breathing Room) */
+  --respiro-h: 4vw; /* Tighter horizontal bleed */
+  --respiro-v-xl: 12rem; /* Massive section gaps */
+  --respiro-v-lg: 8rem;  /* Major internal gaps */
+  --respiro-v-md: 4rem;  /* Content grouping */
+  --respiro-v-sm: 2rem;  /* Small grouping */
+
+  --transition-step: all 0.1s step-end;
+  --transition-chic: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+
+  font-family: var(--font-main);
+  line-height: 1.1; 
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--vx-white);
+  background-color: var(--vx-black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes technical-flicker {
+  0% { opacity: 0.1; }
+  2% { opacity: 0.8; }
+  4% { opacity: 0.1; }
+  6% { opacity: 0.8; }
+  10% { opacity: 0.1; }
+  100% { opacity: 0.1; }
+}
+
+.flicker {
+  animation: technical-flicker 4s infinite;
+}
+
+body {
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  background: #000; /* Infinite Void */
+  overflow-x: hidden;
+  font-family: var(--font-main);
+}
+
+* {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+#root {
+  width: 100%;
+}
+
+.app-container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding-left: 72px;
+  min-width: 0; /* Prevents flex children from pushing width */
+  background: var(--vx-black);
+  position: relative;
+}
+
+/* Global Atmospheric Canvas */
+.content::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* Behind everything */
+  
+  /* Global Spotlight Only */
+  background: radial-gradient(
+    circle at 80% 40%, 
+    rgba(229, 81, 26, 0.05) 0%, 
+    transparent 60%
+  );
+  opacity: 1; 
+}
+
+section {
+  position: relative;
+  border-bottom: none;
+}
+
+@media (max-width: 968px) {
+  .content {
+    padding-left: 0;
+    padding-bottom: 80px;
+  }
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  transition: var(--transition-step);
+}

@@ -1,0 +1,85 @@
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem var(--respiro-h) 12rem; /* Aggressively moving content up */
+}
+
+
+
+.grid {
+  display: grid;
+  grid-template-columns: 0.4fr 1.6fr;
+  gap: 6rem; 
+  width: 100%;
+  align-items: start;
+}
+
+.header {
+  position: sticky;
+  top: 2rem; /* Higher up than before */
+  transform: translateY(-3rem); /* Misalignment from the card grid */
+}
+
+.sectionTitle {
+  font-family: var(--font-main, 'Epilogue'), sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  display: flex;
+  flex-direction: column;
+}
+
+.titleLine1 {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+}
+
+.titleLine2 {
+  font-size: clamp(3.2rem, 7.5vw, 5.5rem);
+}
+
+.cardsContainer {
+  position: relative;
+  width: 100%;
+  height: 380px; /* Matching new card height */
+  overflow: hidden; /* Prevent cards from leaking into Hero or other sections */
+  
+  /* Inner Spotlight */
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.02) 0%,
+    transparent 70%
+  );
+  
+  transition: opacity 0.4s ease;
+}
+
+/* Hide cards during teleportation (menu clicks) for a cleaner look */
+:global(body.is-navigating) .cardsContainer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stackCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: clip-path, opacity, transform, filter;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  
+  .header {
+    position: relative;
+    top: 0;
+  }
+}

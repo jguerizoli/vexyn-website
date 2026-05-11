@@ -1,0 +1,94 @@
+.markerSidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 72px;
+  background: #050505;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  z-index: 1000;
+}
+
+.sidebarLogo {
+  margin-bottom: 4rem;
+}
+
+.sidebarLogoBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.sidebarNav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sidebarNavItem {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.sidebarNavItem:hover, .isActive {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebarNavLabel {
+  position: absolute;
+  left: 52px;
+  background: #fff;
+  color: #000;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.sidebarNavItem:hover .sidebarNavLabel {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 968px) {
+  .markerSidebar {
+    width: 100vw;
+    height: 80px;
+    bottom: 0;
+    top: auto;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-direction: row;
+    padding: 0 2rem;
+    justify-content: space-between;
+  }
+  
+  .sidebarNav {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  .sidebarNavLabel { display: none; }
+}

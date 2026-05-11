@@ -1,0 +1,95 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--respiro-h); /* Architectural horizontal bleed */
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 1;
+}
+
+.heroContainer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+.heroTitle {
+  font-size: clamp(3.5rem, 8vw, 6rem); /* Increased base scale */
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.06em; /* Even tighter for authority */
+  line-height: 0.8; /* Tighter line height */
+  color: #fff;
+  margin-bottom: var(--respiro-v-sm); /* Closer to subtitle */
+  font-family: 'Epilogue', sans-serif;
+}
+
+.titleLine1 {
+  display: block;
+  font-size: 1.2em; /* 20% larger than the base for higher hierarchy */
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.accent {
+  display: block;
+  color: var(--vx-orange);
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-family: 'Space Grotesk', monospace;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 6rem; /* Further from subtitle for clear CTA */
+}
+
+.heroSymbolWrapper {
+  position: absolute;
+  bottom: -100px; /* Adjusted for canvas height */
+  right: -50px;
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.heroSymbol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 968px) {
+  .heroSection {
+    padding: 12rem 5%;
+  }
+  
+  .heroTitle {
+    line-height: 0.85;
+  }
+  
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .heroSymbol {
+    width: 300px !important;
+  }
+}

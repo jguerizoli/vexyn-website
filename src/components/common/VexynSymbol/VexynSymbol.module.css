@@ -1,0 +1,20 @@
+.symbolWrapper {
+  position: relative;
+  display: inline-block;
+  opacity: 0.15; /* Base opacity */
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Premium Glow: multiple layers for a soft, high-end feel */
+  filter: drop-shadow(0 0 10px rgba(229, 83, 28, calc(0.5 * var(--glow-intensity, 1))))
+          drop-shadow(0 0 25px rgba(229, 83, 28, calc(0.3 * var(--glow-intensity, 1))));
+}
+
+.svg path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dashoffset: 0.1px; /* Avoid slight rendering gaps */
+}

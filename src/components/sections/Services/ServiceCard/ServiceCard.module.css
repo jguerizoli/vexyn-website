@@ -1,0 +1,186 @@
+.card {
+  position: absolute;
+  width: 100%;
+  height: 380px;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden; /* Necessary for scanner sweep */
+  transition: var(--transition-chic);
+}
+
+.card:hover {
+  border-color: rgba(229, 81, 26, 0.4);
+  background: #080808;
+}
+
+/* The Scanner Sweep Effect */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(229, 81, 26, 0.05) 50%,
+    transparent 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  animation: scanner-sweep 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes scanner-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+.mainContent {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 3rem;
+}
+
+.topSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-main);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.2; 
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  padding: 0.05em 0;
+  
+  /* Surgical gradient */
+  background: linear-gradient(to bottom, #fff 0%, #888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.card:hover .title {
+  transform: translateX(10px);
+  background: linear-gradient(to right, #fff 0%, var(--vx-orange) 200%);
+  -webkit-background-clip: text;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  max-width: 400px;
+  line-height: 1.4;
+}
+
+.bottomSection {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.deliverablesBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem 2rem;
+}
+
+.listItem {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85); /* Increased readability */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: var(--transition-chic);
+}
+
+.listItem:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.bullet {
+  width: 6px;
+  height: 6px;
+  background: var(--vx-orange);
+  opacity: 0.8; /* Stronger bullet visibility */
+}
+
+.listItem:hover .bullet {
+  opacity: 1;
+  width: 12px;
+  box-shadow: 0 0 15px var(--vx-orange);
+}
+
+.ctaWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 0.75rem;
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ctaWrapper:hover .arrow {
+  transform: translateX(8px);
+}
+
+
+
+@media (max-width: 900px) {
+  .card {
+    padding: 2.5rem;
+    height: auto;
+    min-height: 480px;
+  }
+  
+  .bottomSection {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+}
