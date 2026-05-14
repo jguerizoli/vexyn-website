@@ -1,34 +1,33 @@
-import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Contact from './Contact';
+import buttonStyles from '../../common/Button/Button.module.css';
 
-describe('Contact Section (Vexyn Standards)', () => {
-  it('should render the "START A PROJECT" title', () => {
+describe('Contact Component', () => {
+  it('renders correctly with initial states', () => {
     render(<Contact />);
-    const title = screen.getByText((_, element) => {
-      const hasText = (node: Element) => node.textContent === "START APROJECT" || node.textContent === "START A PROJECT";
-      const nodeHasText = hasText(element as Element);
-      return nodeHasText && element?.tagName.toLowerCase() === 'h2';
-    });
-    expect(title).toBeInTheDocument();
+    expect(screen.getByText(/READY TO START/i)).toBeDefined();
+    expect(screen.getByPlaceholderText(/YOUR FULL NAME/i)).toBeDefined();
   });
 
   it('should use the standard primary button for submission', () => {
     render(<Contact />);
     const button = screen.getByRole('button', { name: /SEND MESSAGE/i });
-    // O botão padrão tem a classe .button e .primary do Button.module.css
-    // Como estamos usando CSS Modules, verificamos se contém a classe que termina com _button e _primary
-    expect(button.className).toMatch(/button/);
-    expect(button.className).toMatch(/primary/);
+    
+    // Validate that the button uses the correct CSS Module classes
+    expect(button.classList.contains(buttonStyles.button)).toBe(true);
+    expect(button.classList.contains(buttonStyles.primary)).toBe(true);
   });
 
-  it('should show technical error labels [ERROR_NULL_INPUT] when submitting empty fields', () => {
+  it('should show technical error labels [REQUIRED] when submitting empty fields', async () => {
+    const user = userEvent.setup();
     render(<Contact />);
     const submitBtn = screen.getByRole('button', { name: /SEND MESSAGE/i });
     
-    fireEvent.click(submitBtn);
+    await user.click(submitBtn);
     
-    const errorLabels = screen.getAllByText(/\[ERROR_NULL_INPUT\]/i);
+    const errorLabels = screen.getAllByText(/\[REQUIRED\]/i);
     expect(errorLabels.length).toBeGreaterThan(0);
   });
 });

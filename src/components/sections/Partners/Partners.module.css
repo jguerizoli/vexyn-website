@@ -43,7 +43,6 @@
 @media (max-width: 768px) {
   .partner {
     font-size: 4rem;
-    gap: 2rem;
   }
   .marqueeContent {
     gap: 2rem;

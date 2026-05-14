@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { useGSAP } from '@gsap/react';
 import { orchestrator } from '../../../lib/orchestrator';
 import type { Direction } from '../../../lib/orchestrator';
@@ -8,37 +9,33 @@ import ServiceCard from './ServiceCard/ServiceCard';
 
 import styles from './Services.module.css';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const SERVICES_DATA = [
   {
     id: '1',
-    title: 'AUTOMAÇÕES',
-    subtitle: 'SISTEMAS INTELIGENTES QUE TRABALHAM POR VOCÊ 24/7',
-    deliverables: ['PYTHON & AI', 'INTEGRAÇÕES API', 'FLUXOS DE TRABALHO'],
-    cta: 'AUTOMATIZAR AGORA'
+    title: 'AUTOMATIONS',
+    subtitle: 'ENGINEERING EFFICIENCY THROUGH DATA FLOW',
+    deliverables: ['PYTHON & AI', 'API INTEGRATIONS', 'WORKFLOWS'],
+    cta: 'AUTOMATE NOW'
   },
   {
     id: '2',
-    title: 'IDENTIDADE',
-    subtitle: 'DESIGN QUE CONSTRÓI AUTORIDADE E PRESENÇA',
-    deliverables: ['BRANDING CORE', 'UI/UX DESIGN', 'SISTEMAS VISUAIS'],
-    cta: 'CONSTRUIR MARCA'
+    title: 'ARCHITECTURE',
+    subtitle: 'DESIGN THAT BUILDS AUTHORITY AND PRESENCE',
+    deliverables: ['BRANDING CORE', 'UI/UX DESIGN', 'VISUAL SYSTEMS'],
+    cta: 'BUILD BRAND'
   },
   {
     id: '3',
-    title: 'DESENVOLVIMENTO',
-    subtitle: 'ENGENHARIA DE SOFTWARE DE ALTA PERFORMANCE',
+    title: 'DEVELOPMENT',
+    subtitle: 'HIGH-PERFORMANCE SOFTWARE ENGINEERING',
     deliverables: ['NEXT.JS / REACT', 'WEBGL / GSAP', 'ARCHITECTURE FIRST'],
-    cta: 'INICIAR PROJETO'
+    cta: 'START PROJECT'
   }
 ];
 
-interface ServicesProps {
-  scrollTo?: (id: string) => void;
-}
-
-const Services: React.FC<ServicesProps> = () => {
+const Services: React.FC = () => {
   const container = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -50,7 +47,7 @@ const Services: React.FC<ServicesProps> = () => {
         id: 'services-pin',
         trigger: container.current,
         start: 'top top',
-        end: '+=300%', // Position 100 mapping
+        end: `+=${SERVICES_DATA.length * 100}%`,
         pin: true,
         scrub: true,
       }
@@ -122,44 +119,57 @@ const Services: React.FC<ServicesProps> = () => {
         );
       }
     });
+    const NAV_THRESHOLD_END = 0.98;
+    const NAV_THRESHOLD_START = 0.02;
+
     // Intent Orchestrator Integration
-    const adapter = {
-      id: 'services',
-      element: container.current!,
-      canNavigate: (direction: Direction) => {
-        const st = ScrollTrigger.getById('services-pin');
-        if (!st) return true;
-        if (direction === 'next') return st.progress >= 0.98;
-        if (direction === 'prev') return st.progress <= 0.02;
-        return true;
-      },
-      onIntent: (direction: Direction) => {
-        const st = ScrollTrigger.getById('services-pin');
-        if (!st) return;
-        
-        // 3 cards = 2 transitions. Steps at 0, 0.5, 1.0
-        const step = 0.5;
-        const currentProgress = st.progress;
-        const targetProgress = direction === 'next' ? 
-          Math.min(1, currentProgress + step) : 
-          Math.max(0, currentProgress - step);
+    if (container.current) {
+      const adapter = {
+        id: 'services',
+        element: container.current,
+        canNavigate: (direction: Direction) => {
+          if (!container.current) return true;
+          const st = ScrollTrigger.getById('services-pin');
+          if (!st) return true;
+          if (direction === 'next') return st.progress >= NAV_THRESHOLD_END;
+          if (direction === 'prev') return st.progress <= NAV_THRESHOLD_START;
+          return true;
+        },
+        onIntent: (direction: Direction) => {
+          if (!container.current) return;
+          const st = ScrollTrigger.getById('services-pin');
+          if (!st) return;
+          
+          // Dynamic steps: 3 cards = 2 transitions (0.5 step). N cards = N-1 transitions.
+          const totalTransitions = SERVICES_DATA.length - 1;
+          const step = 1 / totalTransitions;
+          const currentProgress = st.progress;
+          const targetProgress = direction === 'next' ? 
+            Math.min(1, currentProgress + step) : 
+            Math.max(0, currentProgress - step);
 
-        gsap.to(window, {
-          scrollTo: st.start + (st.end - st.start) * targetProgress,
-          duration: 0.8,
-          ease: "power4.inOut",
-          overwrite: true
-        });
-      },
-      getLandingScroll: (direction: Direction) => {
-        const st = ScrollTrigger.getById('services-pin');
-        if (!st) return container.current!.offsetTop;
-        // If coming from above (next), land at START. If from below (prev), land at END.
-        return direction === 'next' ? st.start : st.end;
-      }
+          gsap.to(window, {
+            scrollTo: st.start + (st.end - st.start) * targetProgress,
+            duration: 0.8,
+            ease: "power4.inOut",
+            overwrite: true
+          });
+        },
+        getLandingScroll: (direction: Direction) => {
+          if (!container.current) return 0;
+          const st = ScrollTrigger.getById('services-pin');
+          if (!st) return container.current.offsetTop;
+          // If coming from above (next), land at START. If from below (prev), land at END.
+          return direction === 'next' ? st.start : st.end;
+        }
+      };
+
+      orchestrator.registerSection(adapter);
+    }
+
+    return () => {
+      orchestrator.unregisterSection('services');
     };
-
-    orchestrator.registerSection(adapter);
   }, { scope: container });
 
   return (

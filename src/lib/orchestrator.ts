@@ -29,12 +29,15 @@ class IntentOrchestrator {
     if (this.observer) return;
     this.observer = Observer.create({
       target: window,
-      type: "wheel,touch,pointer",
+      type: "wheel,touch,pointer,keyboard",
       onDown: () => this.handleIntent('next'),
       onUp: () => this.handleIntent('prev'),
+      onLeft: () => this.handleIntent('prev'),
+      onRight: () => this.handleIntent('next'),
       tolerance: 15,
       wheelSpeed: 1,
-      preventDefault: true
+      preventDefault: true,
+      ignore: "input, textarea, select, button" // Protect form fields
     });
   }
 
@@ -47,6 +50,10 @@ class IntentOrchestrator {
     this.sections.sort((a, b) => {
       return a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
     });
+  }
+
+  public unregisterSection(id: string) {
+    this.sections = this.sections.filter(s => s.id !== id);
   }
 
   private handleIntent(direction: Direction) {
@@ -85,6 +92,9 @@ class IntentOrchestrator {
         this.currentIndex = nextIndex;
         this.unlock();
       },
+      // Note: We don't update currentIndex on interrupt/overwrite here.
+      // The absolute truth of the current index is managed by App.tsx calling syncIndex(),
+      // which monitors the actual scroll position in real-time.
       onInterrupt: () => this.unlock(),
       onOverwrite: () => this.unlock(),
       overwrite: true
@@ -112,16 +122,25 @@ class IntentOrchestrator {
   }
 
   public jumpTo(id: string) {
+    if (this.isBusy) return;
+    
     const index = this.sections.findIndex(s => s.id === id);
-    if (index !== -1) {
-      this.currentIndex = index;
+    if (index !== -1 && index !== this.currentIndex) {
+      const direction: Direction = index > this.currentIndex ? 'next' : 'prev';
       const target = this.sections[index];
+      const targetScroll = target.getLandingScroll(direction);
+      
+      this.currentIndex = index;
       this.lock();
+      
       gsap.to(window, {
-        scrollTo: { y: target.element, autoKill: false },
-        duration: 1,
+        scrollTo: { y: targetScroll, autoKill: false },
+        duration: 0.8,
         ease: "power4.inOut",
-        onComplete: () => this.unlock()
+        onComplete: () => this.unlock(),
+        onInterrupt: () => this.unlock(),
+        onOverwrite: () => this.unlock(),
+        overwrite: true
       });
     }
   }

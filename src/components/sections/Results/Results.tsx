@@ -107,6 +107,7 @@ const Results: React.FC<ResultsProps> = ({ scrollTo }) => {
       className={styles.section}
       ref={sectionRef}
       aria-labelledby="results-title"
+      style={{ overflow: 'hidden' }}
     >
       <div className={styles.wrapper}>
         <div className={styles.portalRing} />
@@ -132,7 +133,7 @@ const Results: React.FC<ResultsProps> = ({ scrollTo }) => {
           </div>
 
           {/* Domain Logic: Conversion Hook */}
-          <div ref={ctaRef} className="opacity-0">
+          <div ref={ctaRef} className={`${styles.ctaWrapper} opacity-0`}>
             <Button 
               onClick={() => scrollTo?.('contact-form')}
               variant="primary"

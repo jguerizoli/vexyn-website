@@ -5,24 +5,24 @@ import ServiceCard from './ServiceCard';
 describe('ServiceCard', () => {
   const mockService = {
     id: '1',
-    title: 'AUTOMAÇÕES',
-    subtitle: 'SISTEMAS INTELIGENTES',
-    deliverables: ['PYTHON & AI', 'INTEGRAÇÕES API'],
-    cta: 'CONHECER'
+    title: 'AUTOMATIONS',
+    subtitle: 'INTELLIGENT SYSTEMS',
+    deliverables: ['PYTHON & AI', 'API INTEGRATIONS'],
+    cta: 'EXPLORE'
   };
 
   it('renders the title and subtitle correctly', () => {
     render(<ServiceCard service={mockService} />);
     
-    expect(screen.getByText('AUTOMAÇÕES')).toBeDefined();
-    expect(screen.getByText('SISTEMAS INTELIGENTES')).toBeDefined();
+    expect(screen.getByText('AUTOMATIONS')).toBeDefined();
+    expect(screen.getByText('INTELLIGENT SYSTEMS')).toBeDefined();
   });
 
   it('renders all deliverables', () => {
     render(<ServiceCard service={mockService} />);
     
     expect(screen.getByText('PYTHON & AI')).toBeDefined();
-    expect(screen.getByText('INTEGRAÇÕES API')).toBeDefined();
+    expect(screen.getByText('API INTEGRATIONS')).toBeDefined();
   });
 
   it('calls onCtaClick when button is clicked', () => {

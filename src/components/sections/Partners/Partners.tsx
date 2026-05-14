@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import styles from './Partners.module.css';
 
@@ -18,6 +18,7 @@ export default function Partners() {
     const content = contentRef.current;
     let clone: HTMLElement | null = null;
     let tl: gsap.core.Timeline | null = null;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const initMarquee = () => {
       // Cleanup previous state
@@ -40,17 +41,20 @@ export default function Partners() {
 
       tl.to([content, clone], {
         x: `-=${contentWidth}`,
-        duration: 30, // Adjust speed here
+        duration: prefersReducedMotion ? 120 : 30, // Much slower if motion reduced
       });
     };
 
     // Wait for fonts and initial frame
     document.fonts.ready.then(() => {
       requestAnimationFrame(initMarquee);
+    }).catch((err) => {
+      console.warn('Fonts loading failed, initializing marquee anyway:', err);
+      requestAnimationFrame(initMarquee);
     });
 
     // Handle Resize with debounce
-    let resizeTimer: number;
+    let resizeTimer: number = 0;
     const handleResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(initMarquee, 200);

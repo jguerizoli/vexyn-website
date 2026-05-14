@@ -39,6 +39,7 @@ function App() {
       });
 
       // Standard Registration for Static Sections
+      // Note: 'services' section self-registers via the Services component to handle internal card state
       if (section.id !== 'services') {
         orchestrator.registerSection({
           id: section.id,
