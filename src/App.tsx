@@ -3,30 +3,58 @@ import Sidebar from './components/layout/Sidebar';
 import Hero from './components/sections/Hero';
 import Services from './components/sections/Services/Services';
 import Results from './components/sections/Results';
+import Partners from './components/sections/Partners/Partners';
+import Contact from './components/sections/Contact/Contact';
 import './App.css';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { orchestrator } from './lib/orchestrator';
 
-gsap.registerPlugin(ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero');
 
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      // Clean Jump: Fade out content that shouldn't be 'scrubbed' during teleportation
-      gsap.to(window, {
-        duration: 1.2,
-        scrollTo: { y: element, autoKill: true },
-        ease: 'power4.inOut',
-        onStart: () => document.body.classList.add('is-navigating'),
-        onComplete: () => {
-          document.body.classList.remove('is-navigating');
-          setActiveSection(id);
-        }
+  useGSAP(() => {
+    // Initialize Orchestrator Authority
+    orchestrator.init();
+
+    // Monitoring: Update Sidebar based on position
+    const sections = gsap.utils.toArray('section') as HTMLElement[];
+    sections.forEach((section) => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => {
+          setActiveSection(section.id);
+          orchestrator.syncIndex(section.id);
+        },
+        onEnterBack: () => {
+          setActiveSection(section.id);
+          orchestrator.syncIndex(section.id);
+        },
       });
-    }
+
+      // Standard Registration for Static Sections
+      if (section.id !== 'services') {
+        orchestrator.registerSection({
+          id: section.id,
+          element: section,
+          canNavigate: () => true, // Static sections always allow jumping
+          onIntent: () => {}, // Nothing to do internally
+          getLandingScroll: () => section.offsetTop
+        });
+      }
+    });
+
+    return () => orchestrator.destroy();
+  }, []);
+
+  const scrollTo = (id: string) => {
+    orchestrator.jumpTo(id);
   };
 
   return (
@@ -34,14 +62,10 @@ function App() {
       <Sidebar activeSection={activeSection} scrollTo={scrollTo} />
       <main className="content">
         <Hero scrollTo={scrollTo} />
-        <Services scrollTo={scrollTo} />
+        <Services />
         <Results scrollTo={scrollTo} />
-        <section id="partners" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--respiro-v-lg) var(--respiro-h)' }}>
-          <h1>Partners Section</h1>
-        </section>
-        <section id="contact-form" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--respiro-v-lg) var(--respiro-h)' }}>
-          <h1>Contact Section</h1>
-        </section>
+        <Partners />
+        <Contact />
       </main>
     </div>
   );

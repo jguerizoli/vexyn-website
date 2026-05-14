@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { orchestrator } from '../../../lib/orchestrator';
+import type { Direction } from '../../../lib/orchestrator';
 import ServiceCard from './ServiceCard/ServiceCard';
 
 import styles from './Services.module.css';
@@ -33,7 +35,7 @@ const SERVICES_DATA = [
 ];
 
 interface ServicesProps {
-  scrollTo: (id: string) => void;
+  scrollTo?: (id: string) => void;
 }
 
 const Services: React.FC<ServicesProps> = () => {
@@ -45,11 +47,12 @@ const Services: React.FC<ServicesProps> = () => {
     
     const tl = gsap.timeline({
       scrollTrigger: {
+        id: 'services-pin',
         trigger: container.current,
         start: 'top top',
-        end: `+=${cards.length * 150}%`,
+        end: '+=300%', // Position 100 mapping
         pin: true,
-        scrub: 0.5,
+        scrub: true,
       }
     });
 
@@ -119,6 +122,44 @@ const Services: React.FC<ServicesProps> = () => {
         );
       }
     });
+    // Intent Orchestrator Integration
+    const adapter = {
+      id: 'services',
+      element: container.current!,
+      canNavigate: (direction: Direction) => {
+        const st = ScrollTrigger.getById('services-pin');
+        if (!st) return true;
+        if (direction === 'next') return st.progress >= 0.98;
+        if (direction === 'prev') return st.progress <= 0.02;
+        return true;
+      },
+      onIntent: (direction: Direction) => {
+        const st = ScrollTrigger.getById('services-pin');
+        if (!st) return;
+        
+        // 3 cards = 2 transitions. Steps at 0, 0.5, 1.0
+        const step = 0.5;
+        const currentProgress = st.progress;
+        const targetProgress = direction === 'next' ? 
+          Math.min(1, currentProgress + step) : 
+          Math.max(0, currentProgress - step);
+
+        gsap.to(window, {
+          scrollTo: st.start + (st.end - st.start) * targetProgress,
+          duration: 0.8,
+          ease: "power4.inOut",
+          overwrite: true
+        });
+      },
+      getLandingScroll: (direction: Direction) => {
+        const st = ScrollTrigger.getById('services-pin');
+        if (!st) return container.current!.offsetTop;
+        // If coming from above (next), land at START. If from below (prev), land at END.
+        return direction === 'next' ? st.start : st.end;
+      }
+    };
+
+    orchestrator.registerSection(adapter);
   }, { scope: container });
 
   return (
@@ -139,7 +180,7 @@ const Services: React.FC<ServicesProps> = () => {
           {SERVICES_DATA.map((service, i) => (
             <div 
               key={service.id} 
-              ref={(el) => (cardsRef.current[i] = el)}
+              ref={(el) => { cardsRef.current[i] = el; }}
               className={styles.stackCard}
             >
               <ServiceCard 

@@ -31,30 +31,28 @@ const Results: React.FC<ResultsProps> = ({ scrollTo }) => {
       fanRotation: 4,
       fanX: 140,
       fanY: 5,
-      scrollLength: "+=150%"
+      scrollLength: "+=100%"
     };
 
     const tl = gsap.timeline({
       scrollTrigger: {
+        id: 'results-trigger',
         trigger: sectionRef.current,
-        start: "top top",
-        end: config.scrollLength,
-        pin: true,
-        scrub: 1,
-        invalidateOnRefresh: true,
+        start: "top 20%", 
+        toggleActions: "play none none none"
       }
     });
 
-    // Phase 1: Context Reveal (Title)
+    // Phase 1: Context Reveal (Title) - Mounted immediately at Position 0
     tl.fromTo(`.${styles.titleStaged1}`, 
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "expo.out" }
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
     );
 
     tl.fromTo(`.${styles.titleStaged2}`, 
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "expo.out" },
-      "-=0.8"
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+      "-=0.6"
     );
 
     // Phase 2: Object Spread (ResultCards)

@@ -70,6 +70,7 @@ body {
 h1, h2, h3 {
   font-family: var(--font-main);
   font-weight: 900;
+  margin: 0;
 }
 
 * {
@@ -115,7 +116,13 @@ h1, h2, h3 {
 
 section {
   position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-bottom: none;
+  overflow: hidden;
 }
 
 @media (max-width: 968px) {
